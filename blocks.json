@@ -1,0 +1,81 @@
+[{
+  "id": 1,
+  "adi": "EMAAR",
+  "ustMahal": null
+}, {
+  "id": 2,
+  "adi": "SE1",
+  "ustMahal": 1
+}, {
+  "id": 3,
+  "adi": "SE2",
+  "ustMahal": 1
+}, {
+  "id": 4,
+  "adi": "SW1",
+  "ustMahal": 1
+}, {
+  "id": 5,
+  "adi": "SW2",
+  "ustMahal": 1
+}, {
+  "id": 6,
+  "adi": "SW3",
+  "ustMahal": 1
+}, {
+  "id": 7,
+  "adi": "N1",
+  "ustMahal": 1
+}, {
+  "id": 8,
+  "adi": "N2",
+  "ustMahal": 1
+}, {
+  "id": 9,
+  "adi": "01",
+  "ustMahal": 2
+}, {
+  "id": 10,
+  "adi": "02",
+  "ustMahal": 2
+}, {
+  "id": 11,
+  "adi": "01",
+  "ustMahal": 3
+}, {
+  "id": 12,
+  "adi": "02",
+  "ustMahal": 3
+}, {
+  "id": 13,
+  "adi": "03",
+  "ustMahal": 3
+}, {
+  "id": 14,
+  "adi": "04",
+  "ustMahal": 3
+}, {
+  "id": 15,
+  "adi": "03",
+  "ustMahal": 2
+}, {
+  "id": 16,
+  "adi": "B01",
+  "ustMahal": 5
+}, {
+  "id": 17,
+  "adi": "B02",
+  "ustMahal": 5
+}, {
+  "id": 18,
+  "adi": "03",
+  "ustMahal": 8
+}, {
+  "id": 51,
+  "adi": "01",
+  "ustMahal": 8
+}, {
+  "id": 88,
+  "adi": "02",
+  "ustMahal": 8
+}]

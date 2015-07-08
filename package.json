@@ -1,0 +1,15 @@
+{
+  "name": "hierdeneme",
+  "version": "1.0.0",
+  "description": "from json to MongoDB hierarchical data injection script works",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Emre Polat <emreplt@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^1.3.0",
+    "mongoose": "^4.0.6"
+  }
+}
