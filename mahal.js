@@ -11,3 +11,19 @@ var schemaOptions = {
     virtuals: true
   }
 };
+
+
+mahalSchema = new Schema({
+  adi: String,
+  ustMahal: {
+    type: mongid,
+    ref: 'mahal'
+  },
+  _olusturan: {
+    type: mongid,
+    ref: 'user'
+  }
+}, schemaOptions);
+
+
+exports.model = mongoose.model('mahal', mahalSchema);

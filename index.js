@@ -3,6 +3,8 @@ var async = require('async');
 
 var mahaller = require('./blocks.json');
 
+var mahalModel = require('./mahal').model;
+
 mongoose.connect('mongodb://localhost/measurement');
 mongoose.set('debug', true);
 
@@ -10,34 +12,53 @@ mongoose.set('debug', true);
 function init() {
   var looptest = 0;
   async.during(function(callback) {
-    var alliswell = true;
-    async.each(mahaller, function(mahal, cbteach) {
-      console.log(!mahal.saved);
-      if (!mahal.saved) {
-        alliswell = false;
-        cbteach();
-        return;
-      }
-      cbteach();
-    }, function(err) {
-      return callback(null, alliswell);
+
+    // testing begins
+
+    async.filter(mahaller, function(mahal, cb) {
+      return mahal.saved ? cb(true) : cb(false);
+    }, function(results, err) {
+      return callback(null, results.length !== mahaller.length);
     });
 
+    // testing ends
+
   }, function(callback) {
-    console.log('Im fired');
-    async.eachSeries(mahaller, function(mahal, callbackic) {
-      looptest++;
-      if (mahal.id == looptest) {
-        mahal.saved = true;
-        console.log(looptest);
-        console.log(mahaller);
-        //callbackic();
+
+
+    looptest++;
+    async.forEachOf(mahaller, function(mahal, cb) {
+      if (mahal.saved) cb(); // please check back
+      if (mahal.ustMahal === null) {
+        var mahalBaba = new mahalModel({
+          adi: mahal.adi
+        });
+        mahalBaba.save(function (err, doc, cb) {
+          mahal.saved = doc.id;
+          console.log('did it');
+          cb();
+        });
+      } else {
+        async.filter(mahaller, function(babamahal, cbf) {
+          return cbf(babamahal.id == mahal.ustMahal);
+        }, function(results, err) {
+          if (err) {
+            throw err;
+          }
+          if (results > 0) {
+            var mahalChild = new mahalModel({
+              adi: mahal.adi,
+              ustMahal: results[0].id
+            });
+            mahalChild.save(function (err, doc) {
+               mahal.saved = doc.id;
+               cb('child i gomdk');
+            });
+          }
+        });
       }
-      callbackic();
+
     }, function(err) {
-      if (err) {
-        throw err;
-      }
       console.log('callbacktayim eachSeriesin');
       callback();
     });
