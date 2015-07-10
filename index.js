@@ -9,66 +9,65 @@ mongoose.connect('mongodb://localhost/measurement');
 mongoose.set('debug', true);
 
 
+var calls = [];
+
+
 function init() {
   var looptest = 0;
-  async.during(function(callback) {
-
-    // testing begins
-
-    async.filter(mahaller, function(mahal, cb) {
-      return mahal.saved ? cb(true) : cb(false);
-    }, function(results, err) {
-      return callback(null, results.length !== mahaller.length);
-    });
-
-    // testing ends
-
+  async.whilst(function() {
+    return calls.length < mahaller.length;
   }, function(callback) {
-
-
     looptest++;
-    async.forEachOf(mahaller, function(mahal, cb) {
-      if (mahal.saved) cb(); // please check back
+    async.each(mahaller, function(mahal, cb) {
+      if (mahal.saved) {
+        return cb(); // please check back
+      }
       if (mahal.ustMahal === null) {
         var mahalBaba = new mahalModel({
           adi: mahal.adi
         });
-        mahalBaba.save(function (err, doc, cb) {
-          mahal.saved = doc.id;
-          console.log('did it');
-          cb();
+        mahal.saved = mahalBaba.id;
+        calls.push(function(cbpush) {
+          mahalBaba.save(cbpush);
         });
+        cb(true);
       } else {
         async.filter(mahaller, function(babamahal, cbf) {
-          return cbf(babamahal.id == mahal.ustMahal);
+          return cbf(babamahal.saved && babamahal.id == mahal.ustMahal);
         }, function(results, err) {
           if (err) {
             throw err;
           }
-          if (results > 0) {
+          if (results.length > 0) {
             var mahalChild = new mahalModel({
               adi: mahal.adi,
-              ustMahal: results[0].id
+              ustMahal: results[0].saved
             });
-            mahalChild.save(function (err, doc) {
-               mahal.saved = doc.id;
-               cb('child i gomdk');
+            mahal.saved = mahalChild.id;
+            calls.push(function(cbpush) {
+              mahalChild.save(cbpush);
             });
+            cb(true);
           }
         });
       }
 
     }, function(err) {
-      console.log('callbacktayim eachSeriesin');
-      callback();
+      if (err) {
+        callback();
+      }
     });
 
   }, function(err) {
-    if (err) {
-      throw err;
-    }
-    console.log('callbacktayim duringin');
-    process.exit(0);
+    console.log('err');
   });
 }
 init();
+
+async.series(calls, function(err, result) {
+  if (err) {
+    console.log(err);
+  }
+  console.log('FIN!');
+  process.exit(0);
+});
