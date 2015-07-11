@@ -11,6 +11,9 @@ mongoose.set('debug', true);
 
 var calls = [];
 
+/*
+  pumping asyncronously
+*/
 
 function init() {
   var looptest = 0;
